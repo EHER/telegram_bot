@@ -9,7 +9,7 @@ load_dotenv()
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 
 def start(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text("Olá! Envie-me uma mensagem para receber uma resposta do modelo!")
+    update.message.reply_text("Hello! Send me a message to receive a response from the model!")
 
 def handle_message(update: Update, context: CallbackContext) -> None:
     user_message = update.message.text
