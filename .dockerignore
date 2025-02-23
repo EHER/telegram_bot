@@ -1,0 +1,13 @@
+*.cache/
+*.log
+*.pyc
+*.pyo
+*.swp
+.DS_Store
+.env
+.env/
+.git
+.gitignore
+Thumbs.db
+__pycache__/
+venv/
