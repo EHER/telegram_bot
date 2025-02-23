@@ -60,6 +60,8 @@ a Raspberry Pi! 🥧
    `.env.dist` example:
 
    ```
+   MODEL_NAME=mistralai/Mistral-7B-Instruct
+   PIPELINE_TYPE=text-generation
    TELEGRAM_TOKEN=your_telegram_bot_token
    ```
 

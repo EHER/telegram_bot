@@ -1,30 +1,34 @@
 import os
+import logging
 from telegram import Update
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 from dotenv import load_dotenv
-from subprocess import check_output
+from model import process_message
+
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 
 load_dotenv()
-
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 
-def start(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text("Hello! Send me a message to receive a response from the model!")
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_text("Hello! Send me a message to receive a response from the model!")
 
-def handle_message(update: Update, context: CallbackContext) -> None:
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_message = update.message.text
-    response = check_output(["python", "model.py", user_message]).decode("utf-8")
-    update.message.reply_text(response)
+    try:
+        response = process_message(user_message)
+        await update.message.reply_text(response)
+    except Exception as e:
+        logging.error(f"Error processing message: {e}")
+        await update.message.reply_text("Sorry, an error occurred while processing your message.")
 
 def main():
-    updater = Updater(TOKEN)
-    dispatcher = updater.dispatcher
+    application = Application.builder().token(TOKEN).build()
 
-    dispatcher.add_handler(CommandHandler("start", start))
-    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_message))
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
-    updater.start_polling()
-    updater.idle()
+    application.run_polling()
 
 if __name__ == "__main__":
     main()

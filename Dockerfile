@@ -1,8 +1,7 @@
 FROM python:3.13-slim
 WORKDIR /app
+ENV PYTHONUNBUFFERED=1
 COPY requirements.txt .
-COPY .env .
-COPY bot.py .
-COPY model.py .
 RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
 CMD ["python", "bot.py"]
