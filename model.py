@@ -3,13 +3,13 @@ from dotenv import load_dotenv
 from transformers import pipeline
 
 load_dotenv()
-MODEL_NAME = os.getenv("MODEL_NAME", "mistralai/Mistral-7B-Instruct")
-PIPELINE_TYPE = os.getenv("PIPELINE_TYPE", "text-generation")
+MODEL_NAME = os.getenv("MODEL_NAME")
+PIPELINE_TYPE = os.getenv("PIPELINE_TYPE")
 
 chatbot = pipeline(PIPELINE_TYPE, model=MODEL_NAME)
 
 def process_message(message: str) -> str:
-    response = chatbot(message, max_length=150, do_sample=True, temperature=0.7)
+    response = chatbot(message)
     return response[0]['generated_text']
 
 if __name__ == "__main__":
